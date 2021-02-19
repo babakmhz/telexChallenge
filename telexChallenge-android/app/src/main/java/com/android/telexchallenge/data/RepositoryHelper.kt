@@ -1,4 +1,3 @@
 package com.android.telexchallenge.data
 
-interface RepositoryHelper : ApiHelper {
-}
+interface RepositoryHelper : ApiHelper
