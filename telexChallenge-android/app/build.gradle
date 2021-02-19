@@ -84,6 +84,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$http_logging"
 
+
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$couroutines_version"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$coroutines_adapter"
@@ -110,6 +111,8 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:$hiltLifecycle_version"
 
 
+    // redirect glide
+    implementation 'com.aminography:redirectglide:2.0.1'
 
 
     //---------------------------- TESTING ----------------------------//

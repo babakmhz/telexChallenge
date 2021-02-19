@@ -9,9 +9,22 @@
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/progress"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:itemCount="4"
+        android:visibility="gone"
+        android:id="@+id/recycler_main"
+        tools:listitem="@layout/item_base" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

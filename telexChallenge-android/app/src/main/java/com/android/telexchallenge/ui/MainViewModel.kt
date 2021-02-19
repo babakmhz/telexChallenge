@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.telexchallenge.data.RepositoryHelper
+import com.android.telexchallenge.data.network.Item
 import com.android.telexchallenge.data.network.SubTopic
-import com.android.telexchallenge.data.network.Topics
+import com.android.telexchallenge.data.network.Topic
 import com.android.telexchallenge.utils.AppLogger
 import com.android.telexchallenge.utils.LiveDataWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,12 +22,12 @@ class MainViewModel @Inject constructor(
     private val job = SupervisorJob()
     private val mUiScope = CoroutineScope(mainDispatcher + job)
 
-    private var _topicsLiveData = MutableLiveData<LiveDataWrapper<Topics>>()
-    val topicsLiveData: LiveData<LiveDataWrapper<Topics>> = _topicsLiveData
+    private var _topicsLiveData = MutableLiveData<LiveDataWrapper<List<Item>>>()
+    val topicLiveData: LiveData<LiveDataWrapper<List<Item>>> = _topicsLiveData
 
     //    map would point to api address and sub topics
-    private var _subTopicsLiveData = MutableLiveData<LiveDataWrapper<Map<String, List<SubTopic>>>>()
-    val subTopicLiveData: LiveData<LiveDataWrapper<Map<String, List<SubTopic>>>> = _subTopicsLiveData
+    private var _subTopicsLiveData = MutableLiveData<LiveDataWrapper<Map<Item, List<SubTopic>>>>()
+    val subTopicLiveData: LiveData<LiveDataWrapper<Map<Item, List<SubTopic>>>> = _subTopicsLiveData
 
 
     fun fetchTopics() {
@@ -37,7 +38,7 @@ class MainViewModel @Inject constructor(
                 try {
                     // fetching stories from remote source
                     val result = repositoryHelper.fetchTopics()
-                    _topicsLiveData.postValue(LiveDataWrapper.success(result))
+                    _topicsLiveData.postValue(LiveDataWrapper.success(result.items))
                     fetchSubTopics(result)
                 } catch (e: Exception) {
                     _topicsLiveData.postValue(LiveDataWrapper.error(e, null))
@@ -48,14 +49,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun fetchSubTopics(topics: Topics) = mUiScope.launch {
+    private fun fetchSubTopics(topic: Topic) = mUiScope.launch {
 //        we can also use flow
-        for (topic in topics.items) {
+        for (topic in topic.items) {
             withContext(Dispatchers.IO) {
                 try {
                     _subTopicsLiveData.postValue(LiveDataWrapper.loading(topic.apiAddress))
                     val result = async { repositoryHelper.fetchSubTopics(topic.apiAddress) }
-                    _subTopicsLiveData.postValue(LiveDataWrapper.success(data = mapOf(topic.apiAddress to result.await())))
+                    _subTopicsLiveData.postValue(LiveDataWrapper.success(data = mapOf(topic to result.await())))
                 } catch (e: Exception) {
                     _topicsLiveData.postValue(LiveDataWrapper.error(e, topic.apiAddress))
                     AppLogger.e("$e")
