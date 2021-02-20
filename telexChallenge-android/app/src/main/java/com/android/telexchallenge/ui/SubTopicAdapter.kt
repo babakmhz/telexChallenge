@@ -6,15 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.aminography.redirectglide.GlideApp
-import com.aminography.redirectglide.RedirectGlideUrl
 import com.android.telexchallenge.R
 import com.android.telexchallenge.data.network.SubTopic
 import com.android.telexchallenge.databinding.ItemSubTopicBinding
 import com.android.telexchallenge.utils.AppLogger
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.signature.ObjectKey
 
 class SubTopicAdapter(
         private val context: Context,
@@ -54,7 +50,7 @@ class SubTopicAdapter(
             AppLogger.i("loading image ${topic.image}")
 
             Glide.with(itemView).load(topic.image)
-                    .skipMemoryCache(true).into(imageView)
+                    .into(imageView)
 
         }
     }

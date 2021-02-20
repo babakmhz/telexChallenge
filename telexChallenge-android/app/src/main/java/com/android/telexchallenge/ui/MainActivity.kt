@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpTopicsObserver() {
         viewModel.topicLiveData.observe(this, {
+            // TODO: 2/19/21 handle liveDataWrapper state
             // replacing progress bar with titles and recycler views
             if (it.response != null) {
                 initiateRecyclerView(it.response)
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpSubTopicsObserver() {
         viewModel.subTopicLiveData.observe(this, {
+            // TODO: 2/19/21 handle liveDataWrapper state
             AppLogger.i("subTopicsMap ${it.response}")
             if (it.response != null && mainRecyclerAdapter.getCurrentData().isNotEmpty()) {
                 val response = it.response

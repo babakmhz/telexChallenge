@@ -49,16 +49,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun fetchSubTopics(topic: Topic) = mUiScope.launch {
-//        we can also use flow
-        for (topic in topic.items) {
+    fun fetchSubTopics(topic: Topic) = mUiScope.launch {
+
+        //we can also use flow
+        // note: unlimited sub items can be handled by pagination, here, i used for loop for sake of simplicity and limited items
+
+        for (subTopic in topic.items) {
             withContext(Dispatchers.IO) {
                 try {
-                    _subTopicsLiveData.postValue(LiveDataWrapper.loading(topic.apiAddress))
-                    val result = async { repositoryHelper.fetchSubTopics(topic.apiAddress) }
-                    _subTopicsLiveData.postValue(LiveDataWrapper.success(data = mapOf(topic to result.await())))
+                    _subTopicsLiveData.postValue(LiveDataWrapper.loading(subTopic.apiAddress))
+                    val result = async { repositoryHelper.fetchSubTopics(subTopic.apiAddress) }
+                    _subTopicsLiveData.postValue(LiveDataWrapper.success(data = mapOf(subTopic to result.await())))
                 } catch (e: Exception) {
-                    _topicsLiveData.postValue(LiveDataWrapper.error(e, topic.apiAddress))
+                    _topicsLiveData.postValue(LiveDataWrapper.error(e, subTopic.apiAddress))
                     AppLogger.e("$e")
                 }
             }
